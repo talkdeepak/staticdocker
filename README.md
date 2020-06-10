@@ -1,2 +1,2 @@
-# static
-Jenkins project udacity
+# static website with Jenkins Docker and Kubernetes
+Jenkins Docker and Kubernetes project udacity

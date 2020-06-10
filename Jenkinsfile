@@ -31,5 +31,61 @@ pipeline {
 				}
 			}
 		}
+
+        stage('Create config file cluster') {
+			        steps {
+				        withAWS(region:'us-west-2', credentials:'aws-static') {
+					    sh '''
+						aws eks --region us-west-2 update-kubeconfig --name EKS-Infra
+					    '''
+				    }
+			    }
+		}
+        		
+		stage('Deploy blue container') {
+			steps {
+				withAWS(region:'us-west-2', credentials:'aws-static') {
+					sh '''
+						kubectl apply -f ./blue-controller.yaml
+					'''
+				}
+			}
+		}
+
+		stage('Deploy green container') {
+			steps {
+				withAWS(region:'us-west-2', credentials:'aws-static') {
+					sh '''
+						kubectl apply -f ./green-controller.yaml
+					'''
+				}
+			}
+		}
+
+		stage('Create the service in the cluster, redirect to blue') {
+			steps {
+				withAWS(region:'us-west-2', credentials:'aws-static') {
+					sh '''
+						kubectl apply -f ./blue-service.yaml
+					'''
+				}
+			}
+		}
+
+		stage('Wait user approve') {
+            steps {
+                input "Ready to redirect traffic to green?"
+            }
+        }
+
+		stage('Create the service in the cluster, redirect to green') {
+			steps {
+				withAWS(region:'us-west-2', credentials:'aws-static') {
+					sh '''
+						kubectl apply -f ./green-service.yaml
+					'''
+				}
+			}
+		}
     }
 }

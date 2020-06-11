@@ -1,8 +1,9 @@
-# static website with Jenkins Docker and Kubernetes
-Jenkins Docker and Kubernetes project udacity
+# Udacity Capstone Project with Jenkins,Dockers, dockerHub and Kubernetes
 
 Deployed web page is available at : 
 http://afb1284bc8e4448ee875232611298232-932320554.us-west-2.elb.amazonaws.com:8000/
+
+Infrastructure is build on aws. This includes Kubernetes cluster.
 
 #Following are the tools used : 
 
